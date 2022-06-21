@@ -98,12 +98,12 @@ namespace OOP_Kyrsovaya
             "<="});
             this.comboBox2.Location = new System.Drawing.Point(94, 129);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(72, 24);
+            this.comboBox2.Size = new System.Drawing.Size(95, 24);
             this.comboBox2.TabIndex = 5;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(204, 129);
+            this.numericUpDown1.Location = new System.Drawing.Point(218, 129);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             550,
             0,

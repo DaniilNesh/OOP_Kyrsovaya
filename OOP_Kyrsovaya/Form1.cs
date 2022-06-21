@@ -15,7 +15,7 @@ namespace OOP_Kyrsovaya
         /// <summary>
         /// Имя файла
         /// </summary>
-        static string fileDB = "Medicaments.txt";
+        static string fileDB = "C:\\Users\\Public\\Documents\\Medicaments.txt";
         public Form1()
         {
             InitializeComponent();
@@ -38,15 +38,21 @@ namespace OOP_Kyrsovaya
                     MessageBoxIcon.Error
                     );
         } 
-        
+        /// <summary>
+        /// Создание файла
+        /// </summary>
+        /// <param name="file">Путь к файлу</param>
+        public static void CreateFile(string file)
+        {
+            if (!File.Exists(file))
+            {
+                File.WriteAllText(file, "");
+            }
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             this.MinimumSize = new Size(770, 366);
             this.MaximumSize = new Size(770, 366);
-            if (!File.Exists(fileDB))
-            {
-                File.Create(fileDB);
-            }
         }
         /// <summary>
         /// Чтение из базы данных
@@ -136,6 +142,7 @@ namespace OOP_Kyrsovaya
 
             List<Medicines> allMedicaments = JsonConvert.DeserializeObject<List<Medicines>>(json);
             int index = allMedicaments.FindIndex(m => m.Title == title);
+            if (index == -1) return;
             allMedicaments[index].Title = newTitle;
             allMedicaments[index].Illness = newIllness;
             allMedicaments[index].Price = newPrice;
@@ -152,7 +159,8 @@ namespace OOP_Kyrsovaya
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
-        {            
+        {
+            CreateFile(fileDB);
             string title = textBox1.Text;
             string illness = textBox2.Text;
             double price = 0;
@@ -202,6 +210,7 @@ namespace OOP_Kyrsovaya
         /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
+            CreateFile(fileDB);
             DataSet medData = new DataSet("MedicStore");
             DataTable medTable = new DataTable("Lekarstva");
             // добавляем таблицу в dataSet
@@ -248,6 +257,11 @@ namespace OOP_Kyrsovaya
         {
             foreach (DataGridViewRow row in dataGridView1.SelectedRows)
             {
+                if(dataGridView1[0, row.Index].Value == null)
+                {
+                    printError("Это пустая строка!");
+                    return;
+                }
                 DeletFromDB(dataGridView1[0, row.Index].Value.ToString());
                 dataGridView1.Rows.Remove(row);
             }
@@ -260,15 +274,22 @@ namespace OOP_Kyrsovaya
         private void button5_Click(object sender, EventArgs e)
         {
             int count = 0;
+            Form f = Application.OpenForms["EditForm"];
             foreach (DataGridViewRow row in dataGridView1.SelectedRows)
             {
-                if(row.Index != -1) count++;
+                if (dataGridView1[0, row.Index].Value == null)
+                {
+                    printError("Это пустая строка!");
+                    return;
+                }
+                if (row.Index != -1) count++;
             }
             if (count > 1 || count == 0) return;
             else
             {
                 EditForm editForm = new EditForm(this);
-                editForm.Show();
+                editForm.Show();                
+                if(f != null) f.Close();
             }
         }
         /// <summary>
@@ -278,8 +299,10 @@ namespace OOP_Kyrsovaya
         /// <param name="e"></param>
         private void button6_Click(object sender, EventArgs e)
         {
+            Form form = Application.OpenForms["SortForm"];
             SortForm sortForm = new SortForm(this);
             sortForm.Show();
+            if (form != null) form.Close();
         }
         /// <summary>
         /// Поиск и фильтрация
@@ -288,8 +311,10 @@ namespace OOP_Kyrsovaya
         /// <param name="e"></param>
         private void button7_Click(object sender, EventArgs e)
         {
+            Form form = Application.OpenForms["FiltrForm"];
             FiltrForm filtr = new FiltrForm(this);
             filtr.Show();
+            if (form != null) form.Close();
         }
     }
 }

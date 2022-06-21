@@ -98,24 +98,16 @@ namespace OOP_Kyrsovaya
                 }
                 Update(buffer);
             }
-            else if(sign == "")
+            else if(sign == "" && comboBox1.SelectedIndex != 2)
             {
                 Update(values);
 
             }else if(comboBox1.SelectedIndex == 2)
             {
-                if (sign == ">=")
-                {
-                    var find = buffer.Where(f => f.Price >= price);
-                    foreach (var i in find)
-                        values.Add(i);
-                }
-                else if (sign == "<=")
-                {
-                    var find = buffer.Where(f => f.Price <= price);
-                    foreach (var i in find)
-                        values.Add(i);
-                }
+                price = Convert.ToDouble(textBox1.Text);
+                var find = buffer.Where(f => f.Price == price);
+                foreach (var i in find)
+                    values.Add(i);
                 Update(values);
             }
             
@@ -129,10 +121,16 @@ namespace OOP_Kyrsovaya
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedIndex == 2)
-                textBox1.Enabled = false;
+            if(comboBox1.SelectedIndex == 2)
+            {
+                comboBox2.Enabled = false;
+                numericUpDown1.Enabled = false;
+            }
             else
-                textBox1.Enabled = true;
+            {
+                comboBox2.Enabled = true;
+                numericUpDown1.Enabled = true;
+            }
         }
     }
 }
